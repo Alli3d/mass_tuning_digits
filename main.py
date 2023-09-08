@@ -7,9 +7,21 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 
 df = load_digits()
-x_train, y_train, x_test, y_test = train_test_split(df.data, df.target, test_size=0.2)
+
+scaler = StandardScaler()
+x_scaled = scaler.fit_transform(df.data)
+pca = PCA(0.95)        # pca = PCA(n_components=10)
+x_pca = pca.fit_transform(x_scaled)
+# to check effect of reducing to principle components
+# print(x_scaled.shape)
+# print(x_pca.shape)
+
+x_train, x_test, y_train, y_test = train_test_split(x_pca, df.target, test_size=0.2)
+
 
 model_params = {
     'svm': {
